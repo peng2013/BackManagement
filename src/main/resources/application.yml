@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+
+# Mybatis
+mybatis:
+  typeAliasesPackage: com.peng.BackManagement
+  mapperLocations: classpath:mapper/**/**/*.xml
+
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/bgmanagement?useUnicode=true&characterEncoding=utf8&useSSL=true
+    username: root
+    password: 123456
+    driver: com.mysql.jdbc.Driver
+
+
+#打印sql
+logging:
+  level:
+   com.peng.BackManagement: debug
+

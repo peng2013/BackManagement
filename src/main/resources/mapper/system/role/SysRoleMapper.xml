@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peng.BackManagement.module.system.role.mapper.SysRoleMapper">
+    <resultMap id="BaseResultMap" type="com.peng.BackManagement.module.system.role.dao.SysRole">
+        <id column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+        <result column="role_key" jdbcType="VARCHAR" property="roleKey"/>
+        <result column="role_sort" jdbcType="INTEGER" property="roleSort"/>
+        <result column="status" jdbcType="CHAR" property="status"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    role_id, role_name, role_key, role_sort, status, create_by, create_time, update_by, 
+    update_time, remark
+  </sql>
+    <sql id="selectSysRole">
+    select role_id, role_name, role_key, role_sort, status, create_by, create_time, update_by,
+    update_time, remark from sys_role
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_role
+        where role_id = #{roleId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_role
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </delete>
+    <insert id="saveRoleInfo" parameterType="com.peng.BackManagement.module.system.role.dao.SysRole">
+        insert into sys_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">
+                role_id,
+            </if>
+            <if test="roleName != null">
+                role_name,
+            </if>
+            <if test="roleKey != null">
+                role_key,
+            </if>
+            <if test="roleSort != null">
+                role_sort,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">
+                #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="roleName != null">
+                #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="roleKey != null">
+                #{roleKey,jdbcType=VARCHAR},
+            </if>
+            <if test="roleSort != null">
+                #{roleSort,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=CHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.peng.BackManagement.module.system.role.dao.SysRole">
+        update sys_role
+        <set>
+            <if test="roleName != null">
+                role_name = #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="roleKey != null">
+                role_key = #{roleKey,jdbcType=VARCHAR},
+            </if>
+            <if test="roleSort != null">
+                role_sort = #{roleSort,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=CHAR},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where role_id = #{roleId,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectRoleList" parameterType="com.peng.BackManagement.module.system.role.dao.SysRole"
+            resultType="com.peng.BackManagement.module.system.role.dao.SysRole">
+        <include refid="selectSysRole"/>
+        <where>
+            <if test="roleName != null and roleName != ''">
+                and role_name like concat('%',#{roleName},'%')
+            </if>
+            <if test="status != null and status != ''">
+                and status=#{status}
+            </if>
+            <if test="roleKey != null and roleKey != ''">
+                and role_key=#{roleKey}
+            </if>
+            <if test="params != null and params.beginTime != ''">
+                and create_time <![CDATA[>= #{params.beginTime}]]>
+            </if>
+            <if test="parms != nulll and params.endTime != ''">
+                and create_time <![CDATA[<= #{params.endTime}]]>
+            </if>
+        </where>
+    </select>
+    <select id="selectRolesByUserId" parameterType="Long" resultMap="BaseResultMap">
+        select s_r.role_id,s_r.role_name,s_r.role_key
+        from sys_user s_u
+           left join sys_user_role s_u_r on s_u.user_id = s_u_r.user_id
+           left join sys_role s_r on s_u_r.role_id = s_r.role_id
+        where s_u_r.user_id = #{userId}
+    </select>
+
+    <select id="selectRoleAll" resultMap="BaseResultMap">
+        <include refid="selectSysRole"/>
+    </select>
+
+    <select id="selectRoleByRoleId" parameterType="Long" resultMap="BaseResultMap">
+        <include refid="selectSysRole"/>
+        where role_id = #{roleId}
+    </select>
+
+    <delete id="deleteRoleByRoleId" parameterType="Long">
+        delete from sys_role where role_id = #{roleId}
+    </delete>
+
+    <delete id="batchDeleteRolesByRoleIds" parameterType="Long">
+        delete from sys_role where role_id in
+        <foreach collection="array" item="roleId" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </delete>
+
+    <select id="checkRoleNameUnique" parameterType="String" resultMap="BaseResultMap">
+        <include refid="selectSysRole"/>
+        where role_name = #{roleName}
+    </select>
+
+    <select id="countSysRoleByRoleId" resultType="Integer">
+        select count(*) from sys_user_role where role_id = #{roleId}
+    </select>
+
+    <select id="selectPrivByUserId" parameterType="Long" resultMap="BaseResultMap">
+       selct sys_role.role_id,sys_role.role_name,sys_role.role_key
+       from sys_user
+            left join sys_user_role on sys_user.user_id=sys_user.user_id
+            left join sys_role on sys_user_role.role_id=sys_role.role_id
+       where sys_user_role.user_id=#{userId}
+    </select>
+</mapper>

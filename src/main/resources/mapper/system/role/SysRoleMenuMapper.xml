@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.peng.BackManagement.module.system.role.mapper.SysRoleMenuMapper">
+  <resultMap id="BaseResultMap" type="com.peng.BackManagement.module.system.role.dao.SysRoleMenu">
+    <id column="role_id" jdbcType="INTEGER" property="roleId" />
+    <id column="menu_id" jdbcType="INTEGER" property="menuId" />
+  </resultMap>
+  <delete id="deleteSysRoleMenuByRoleId" parameterType="Long">
+    delete from sys_role_menu
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </delete>
+
+  <delete id="batchDeleteRoleMenu" parameterType="Long">
+    delete from sys_role_menu where role_id in
+    <foreach collection="array" item="roleId" open="(" separator="," close=")">
+      #{roleId}
+    </foreach>
+  </delete>
+
+  <select id="selectCountRoleMenuByMenuId" resultType="java.lang.Integer">
+    select count(*) from sys_role_menu where menu_id=#{menuId}
+  </select>
+  <insert id="batchSaveRoleMenu" parameterType="com.peng.BackManagement.module.system.role.dao.SysRoleMenu">
+    insert into sys_role_menu (role_id, menu_id)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.roleId},#{item.menuId})
+    </foreach>
+  </insert>
+</mapper>
